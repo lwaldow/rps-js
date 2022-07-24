@@ -1,9 +1,87 @@
-
+const VICTORY_TEXT = {
+    start: "...",
+    tie: "it was a tie!",
+    youWinRound: "you won this round!!",
+    cpuWinRound: "the CPU won this round!",
+    youWinGame: "you won the tournament!!",
+    cpuWinGame: "the CPU won the tournament!"
+}
 
 const WHO_BEATS_WHO = {
     "rock": "scissors",
     "paper": "rock",
     "scissors": "paper"
+}
+
+for (let name of Object.keys(WHO_BEATS_WHO)) {
+    document.querySelector(`#${name}-button`).addEventListener("click", playRound);
+}
+
+const victoryTextElem = document.querySelector("#victory-text");
+const playerScoreElem = document.querySelector("#player-score");
+const cpuScoreElem = document.querySelector("#cpu-score");
+const sbPlayerElem = document.querySelector("#sb-emoji-1");
+const sbCPUElem = document.querySelector("#sb-emoji-2");
+let enableGame = true;
+
+let playerScore = 0;
+let cpuScore = 0;
+
+function updateState(status) {
+    if (status === "youWinRound") {
+        playerScore++;
+    }
+    else if (status === "cpuWinRound") {
+        cpuScore++;
+    }
+    playerScoreElem.innerText = String(playerScore);
+    cpuScoreElem.innerText = String(cpuScore);
+    if (playerScore == 5) {
+        victoryTextElem.innerText = VICTORY_TEXT.youWinGame;
+        enableGame = false;
+    } else if (cpuScore == 5) {
+        victoryTextElem.innerText = VICTORY_TEXT.cpuWinGame;
+        enableGame = false;
+    }
+    else {
+        victoryTextElem.innerText = VICTORY_TEXT[status];
+    }
+}
+
+function updateRoundIcons(choice, elem) {
+    let emoji = '';
+    switch (choice) {
+        case "rock":
+            emoji = "🪨";
+            break;
+        case "paper":
+            emoji = "🧻";
+            break;
+        case "scissors":
+            emoji = "🗡️";
+            break;
+    }
+    elem.firstElementChild.innerText = emoji;
+    elem.lastElementChild.innerText = choice;
+}
+
+function playRound(event) {
+    if(!enableGame)
+        return;
+    let player = event.currentTarget.lastElementChild.innerText;
+    let computer = getComputerChoice();
+
+    updateRoundIcons(player, sbPlayerElem);
+    updateRoundIcons(computer, sbCPUElem);
+
+    if (computer === player) 
+        updateState("tie");
+    else if (WHO_BEATS_WHO[player] === computer) {
+        return updateState("youWinRound");
+    }
+    else {
+        return updateState("cpuWinRound");
+    }
 }
 
 function getComputerChoice() {
@@ -19,48 +97,3 @@ function getComputerChoice() {
             return "rock";
     }
 }
-
-function validatePlayerChoice(input) {
-    input = input.toLowerCase().trim();
-    if (input !== "rock" && input !== "paper" && input !== "scissors") return null;
-    return input;
-}
-
-function playRound(player, computer) {
-
-    if (computer === player) 
-        return "It's a tie! Go again!";
-    if (WHO_BEATS_WHO[player] === computer)
-        return "You win this round!";
-    else return "The computer wins this round!";
-
-}
-
-function game() {
-    alert("Welcome to ROCK, PAPER, SCISSORS! \n Click OK to begin Round 1.");
-    let playerCount = 0;
-    let roundCount = 0;
-    while (roundCount < 5 && playerCount < 3 && roundCount - playerCount < 3) {
-        let computer = getComputerChoice();
-        console.log(computer);
-
-        let player = validatePlayerChoice(prompt(`ROUND ${roundCount + 1}\n  YOU: ${playerCount} CPU: ${roundCount - playerCount} \n  Please select your fighter:`));
-        while (player == null) {
-            player = validatePlayerChoice(prompt(`ROUND ${roundCount + 1}\n  INVALID CHOICE!\n  Please select your fighter:`));
-        }
-
-        winner = playRound(player, computer);
-        
-        if (winner === "You win this round!") {
-            playerCount++;
-            roundCount++;
-        } else if (winner === "The computer wins this round!") {
-            roundCount++;
-        }
-
-        alert(`You chose: ${player.toUpperCase()}\nComputer chose: ${computer.toUpperCase()}\n  ${winner}`);
-    }
-    alert(`You won ${playerCount} out of the 5 rounds. The computer won ${roundCount - playerCount}.\n  ${playerCount >= 3 ? "You won!" : "You lost!"}`);
-}
-
-

@@ -2,11 +2,44 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Rock,Paper,Scissors</title>
+        <title>RPS</title>
         <link rel="stylesheet" href="styles.css">
+        <script src="script.js" defer></script>
     </head>
     <body>
-        <button onclick="game()">Click here to play!</button>
-        <script src="script.js"></script>
+        <H1>rock, paper, scissors</H1>
+        <div>you - - - cpu</div>
+        <div id="score"><span id="player-score">0</span> : <span id="cpu-score">0</span></div>
+        <div id="cur-round">
+            <div class="symbol-container" id="sb-emoji-1">
+                <div class="emoji">💭</div>
+                <div>...</div>
+            </div>
+            <div><strong>VS</strong></div>
+            <div class="symbol-container" id="sb-emoji-2">
+                <div class="emoji">💭</div>
+                <div>...</div>
+            </div>
+        </div>
+        <div id="subtext">
+            <div><strong>you</strong></div>
+            <div><strong>cpu</strong></div>
+        </div>
+        <div id="victory-text">...</div>
+        <div id="container">
+            <div class="symbol-container" id="rock-button" onselectstart="return false">
+                <div class="emoji">🪨</div>
+                <div>rock</div>
+            </div>
+            <div class="symbol-container" id="paper-button" onselectstart="return false">
+                <div class="emoji">🧻</div>
+                <div>paper</div>
+            </div>
+            <div class="symbol-container" id="scissors-button" onselectstart="return false">
+                <div class="emoji">🗡️</div>
+                <div>scissors</div>
+            </div>
+        </div>
+        <div>choose your weapon...</div>
     </body>
 </html>
